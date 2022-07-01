@@ -4,6 +4,13 @@ PGraphics shapes_dict;
 PGraphics copy_filter;
 PGraphics lerp;
 
+PGraphics pic_01;
+PGraphics pic_02;
+PGraphics pic_03;
+PGraphics pic_04;
+PGraphics pic_05;
+PGraphics pic_06;
+
 PImage seed_image;
 
 // Dictionary variables //
@@ -31,7 +38,14 @@ void setup() {
     copy_filter = createGraphics(main.width, main.height);
     lerp = createGraphics(main.width, main.height);
 
-    seed_image = loadImage("seed_02.jpg");
+    pic_01 = createGraphics(main.width / 8, main.height / 12);
+    pic_02 = createGraphics(main.width / 8, main.height / 12);
+    pic_03 = createGraphics(main.width / 8, main.height / 12);
+    pic_04 = createGraphics(main.width / 8, main.height / 12);
+    pic_05 = createGraphics(main.width / 8, main.height / 12);
+    pic_06 = createGraphics(main.width / 8, main.height / 12);
+
+    seed_image = loadImage("seed_03.jpg");
 
     // Dict variables
 
@@ -47,23 +61,29 @@ void draw() {
     drawShapesDict();
     drawCopyFilter();
     drawLerp();
+    drawPic01();
 
     drawMain();
 
+    pushMatrix();
     imageMode(CENTER);
     translate(width / 2, height / 2);
     image(main, 0, 0);
+    popMatrix();
+
+    //customCopy();
 
     // println(inventory.size());
 }
 
 void drawMain(){
     main.beginDraw();
-    main.background(255,0,0);
+    main.background(0);
     main.image(seed, 0, 0, (main.width / 4) * 3, (main.height / 6) * 4);
     main.image(shapes_dict, 0, (main.height / 6) * 4, (main.width / 4) * 3, (main.height / 12) * 3);
     main.image(copy_filter, 0, (main.height / 12) * 11,(main.width / 4) * 3, main.height / 12);
     main.image(lerp, (main.width / 4) * 3, 0, main.width / 4 + 2, main.height);
+    main.image(pic_01, 0, (main.height / 12) * 11);
     
     main.endDraw();
 }
@@ -155,11 +175,15 @@ void drawCopyFilter() {
     copy_filter.translate(-shapes_w, 0);
 
     while (index < amount) {
+
         col += shapes_w;
         index++;
-        copy_filter.stroke(0 + index * 10, 0, 0);
-        copy_filter.fill(0 + index * 10, 0, 0);
-        copy_filter.rect(col,0, shapes_w, shapes_h);
+
+        // copy_filter.stroke(0 + index * 10, 0, 0);
+        // copy_filter.fill(0 + index * 10, 0, 0);
+        // copy_filter.rect(col,0, shapes_w, shapes_h);
+        copy_filter.copy(seed_image, 0, 0, 400, 400, int(col), 0, int(shapes_w), int(shapes_h));
+
     }
 
     copy_filter.endDraw();
@@ -189,9 +213,41 @@ void drawLerp() {
     lerp.endDraw();
 }
 
+void drawPic01(){
+    pic_01.beginDraw();
+    pic_01.background(0, 255, 0);
+    pic_01.image(seed, 0, 0, pic_01.width, pic_01.height);
+
+    for (int i = 0; i < pic_01.width; ++i) {
+        for (int j = 0; j < pic_01.height; ++j) {
+            color copyColor = pic_01.get(i, j);
+            stroke(copyColor);
+            strokeWeight(2);
+            point(i, j);
+        }
+    }
+
+    pic_01.endDraw();
+}
+
 void keyPressed() {
     if (key == 's' || key == 'S') {
       save("export/export.tif");
       exit();
     }
 }
+
+// void customCopy(){
+
+//     translate(0,100);
+
+//     for (int i = 0; i < seed_image.width; ++i) {
+//         for (int j = 0; j < seed_image.height; ++j) {
+//             color copyColor = seed_image.get(i, j);
+//             stroke(copyColor);
+//             strokeWeight(2);
+//             point(i, j);
+//         }
+//     }
+
+// }
