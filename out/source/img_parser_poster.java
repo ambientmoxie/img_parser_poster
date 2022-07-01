@@ -70,6 +70,8 @@ float custom_height;
     imageMode(CENTER);
     translate(width / 2, height / 2);
     image(main, 0, 0);
+
+    // println(inventory.size());
 }
 
  public void drawMain(){
@@ -137,7 +139,10 @@ float custom_height;
 
     while (index < amount) {
 
-        usableColor = unhex(inventory.key(index));
+        // remap la totalité des data du dictionnaire sur l'index d'incrementation pour une plus grand variété de couleurs
+
+        float inventory_mapping = map(index, 0, amount, 0, PApplet.parseFloat(inventory.size()));
+        usableColor = unhex(inventory.key(PApplet.parseInt(inventory_mapping))); // old --> usableColor = unhex(inventory.key(index);
 
         col += shapes_w;
         index++;

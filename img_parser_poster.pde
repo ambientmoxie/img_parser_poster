@@ -53,6 +53,8 @@ void draw() {
     imageMode(CENTER);
     translate(width / 2, height / 2);
     image(main, 0, 0);
+
+    // println(inventory.size());
 }
 
 void drawMain(){
@@ -120,7 +122,10 @@ void drawShapesDict(){
 
     while (index < amount) {
 
-        usableColor = unhex(inventory.key(index));
+        // remap la totalité des data du dictionnaire sur l'index d'incrementation pour une plus grand variété de couleurs
+
+        float inventory_mapping = map(index, 0, amount, 0, float(inventory.size()));
+        usableColor = unhex(inventory.key(int(inventory_mapping))); // old --> usableColor = unhex(inventory.key(index);
 
         col += shapes_w;
         index++;
