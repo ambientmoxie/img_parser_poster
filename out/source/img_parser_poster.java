@@ -23,6 +23,13 @@ PGraphics lerp;
 
 PImage seed_image;
 
+// Dictionary variables //
+
+IntDict inventory;
+String storedColor;
+int usableColor;
+int starter;
+
 
 int border;
 
@@ -43,15 +50,22 @@ float custom_height;
 
     seed_image = loadImage("seed_02.jpg");
 
+    // Dict variables
+
+    inventory = new IntDict();
+    starter = 1; 
+
 }
 
  public void draw() {
     background(200);
-    drawMain();
     drawSeed();
+
     drawShapesDict();
     drawCopyFilter();
     drawLerp();
+
+    drawMain();
 
     imageMode(CENTER);
     translate(width / 2, height / 2);
@@ -76,10 +90,38 @@ float custom_height;
     seed.endDraw();
 }
 
+ public void fillDict(){
+    for (int i = 0; i < seed.width; ++i) {
+        for (int j = 0; j < seed.height; ++j) {
+            
+            int pixelIndex = i + j * seed.width;
+            int pixR = seed.pixels[pixelIndex];
+            int pixG = seed.pixels[pixelIndex];
+            int pixB = seed.pixels[pixelIndex];
+
+            float cR = red(pixR);
+            float cG = green(pixG);
+            float cB = blue(pixB);
+
+            storedColor = hex(color(cR, cG, cB));
+
+            if (inventory.hasKey(storedColor) == true) {
+                inventory.increment(storedColor);
+            } else {
+                inventory.set(storedColor, starter);
+            }
+        }
+    }
+
+    inventory.sortValuesReverse();
+}
+
  public void drawShapesDict(){
     shapes_dict.beginDraw();
 
     shapes_dict.clear();
+
+    fillDict();
 
     float per_row = 6; // number of square per row
     float per_column = 3; // number of square per column
@@ -95,10 +137,12 @@ float custom_height;
 
     while (index < amount) {
 
+        usableColor = unhex(inventory.key(index));
+
         col += shapes_w;
         index++;
-        shapes_dict.stroke(0 + index * 10);
-        shapes_dict.fill(0 + index * 10);
+        shapes_dict.stroke(usableColor);
+        shapes_dict.fill(usableColor);
         shapes_dict.rect(col,row, shapes_w, shapes_h);
 
         if(index % per_row == 0) {
@@ -123,7 +167,6 @@ float custom_height;
     copy_filter.translate(-shapes_w, 0);
 
     while (index < amount) {
-
         col += shapes_w;
         index++;
         copy_filter.stroke(0 + index * 10, 0, 0);
