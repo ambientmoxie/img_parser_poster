@@ -62,6 +62,8 @@ void draw() {
     drawCopyFilter();
     drawLerp();
     drawPic01();
+    drawPic02();
+    drawPic03();
 
     drawMain();
 
@@ -84,6 +86,8 @@ void drawMain(){
     main.image(copy_filter, 0, (main.height / 12) * 11,(main.width / 4) * 3, main.height / 12);
     main.image(lerp, (main.width / 4) * 3, 0, main.width / 4 + 2, main.height);
     main.image(pic_01, 0, (main.height / 12) * 11);
+    main.image(pic_02, main.width / 8, (main.height / 12) * 11);
+    main.image(pic_03, (main.width / 8) * 2, (main.height / 12) * 11);
     
     main.endDraw();
 }
@@ -221,13 +225,74 @@ void drawPic01(){
     for (int i = 0; i < pic_01.width; ++i) {
         for (int j = 0; j < pic_01.height; ++j) {
             color copyColor = pic_01.get(i, j);
-            stroke(copyColor);
-            strokeWeight(2);
-            point(i, j);
+
+            float px_r = red(copyColor);
+            float px_g = green(copyColor);
+            float px_b = blue(copyColor);
+
+            color new_copy_color = color(px_r, 0, 0);
+
+            pic_01.stroke(new_copy_color);
+            pic_01.strokeWeight(1);
+            pic_01.point(i, j);
         }
     }
 
     pic_01.endDraw();
+}
+
+void drawPic02(){
+    pic_02.beginDraw();
+    pic_02.background(0, 255, 0);
+    pic_02.image(seed, 0, 0, pic_02.width, pic_02.height);
+
+    for (int i = 0; i < pic_02.width; ++i) {
+        for (int j = 0; j < pic_02.height; ++j) {
+            color copyColor = pic_02.get(i, j);
+
+            float px_r = red(copyColor);
+            float px_g = green(copyColor);
+            float px_b = blue(copyColor);
+
+            color new_copy_color = color(0, px_g, 0);
+
+            pic_02.stroke(new_copy_color);
+            pic_02.strokeWeight(1);
+            pic_02.point(i, j);
+        }
+    }
+
+    pic_02.endDraw();
+}
+
+void drawPic03(){
+    pic_03.beginDraw();
+    pic_03.background(0, 255, 0);
+    pic_03.image(seed, 0, 0, pic_03.width, pic_03.height);
+
+    for (int i = 0; i < pic_03.width; ++i) {
+        for (int j = 0; j < pic_03.height; ++j) {
+            color copyColor = pic_03.get(i, j);
+
+            float px_r = red(copyColor);
+            float px_g = green(copyColor);
+            float px_b = blue(copyColor);
+            float bright = brightness(copyColor);
+
+            if(bright > 150) {
+                copyColor = color(255,255,255);
+            }else {
+                copyColor = color(0, 0, px_b);
+            }
+
+            pic_03.stroke(copyColor);
+            
+            pic_03.strokeWeight(1);
+            pic_03.point(i, j);
+        }
+    }
+
+    pic_03.endDraw();
 }
 
 void keyPressed() {
