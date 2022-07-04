@@ -49,7 +49,7 @@ void setup() {
 
     
 
-    seed_image = loadImage("seed_03.jpg");
+    seed_image = loadImage("seed_10.jpg");
 
     // Dict variables
 
@@ -88,10 +88,10 @@ void draw() {
 
 void drawMain(){
     main.beginDraw();
-    // main.image(pic_01, 0, 0);
     main.image(seed, 0, 0, (main.width / 4) * 3, (main.height / 6) * 4);
     main.image(shapes_dict, 0, (main.height / 6) * 4, (main.width / 4) * 3, (main.height / 12) * 3);
     main.image(lerp, (main.width / 4) * 3, 0, main.width / 4 + 2, main.height);
+    // main.image(pic_01, 0, 0);
     main.image(pic_02, 0, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
     main.image(pic_03, main.width / 8, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
     main.image(pic_04, (main.width / 8) * 2, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
@@ -225,7 +225,7 @@ void drawLerp() {
 
 void drawPic01(){
     pic_01.beginDraw();
-    pic_01.image(seed_image, 0, 0, pic_01.width, pic_01.height);
+    pic_01.image(seed_image, 0, 0, pic_01.width / 2, pic_01.height / 2);
     pic_01.endDraw();
 }
 
