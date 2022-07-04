@@ -37,6 +37,7 @@ String storedColor;
 int usableColor;
 int starter;
 
+int[] bright_numb;
 
 int border;
 
@@ -46,7 +47,7 @@ float custom_height;
  public void setup() {
     /* size commented out by preprocessor */; // A4 ratio
 
-    //pixelDensity(2);
+    /* pixelDensity commented out by preprocessor */;
     border = 28;
     
     main = createGraphics(width - border, height - border);
@@ -63,7 +64,7 @@ float custom_height;
     pic_07 = createGraphics(main.width / 8, main.height / 12);
     pic_07 = createGraphics(main.width / 8, main.height / 12);
 
-    println(main.width / 8);
+    
 
     seed_image = loadImage("seed_03.jpg");
 
@@ -75,7 +76,7 @@ float custom_height;
 }
 
  public void draw() {
-    background(0);
+    background(255);
     drawSeed();
 
     drawShapesDict();
@@ -114,7 +115,14 @@ float custom_height;
     main.image(pic_05, (main.width / 8) * 3, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
     main.image(pic_06, (main.width / 8) * 4, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
     main.image(pic_07, (main.width / 8) * 5, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
-    
+
+    main.noStroke();
+    main.fill(0,0,255);
+    main.rect((main.width / 150) * 167 ,0,main.width / 150, main.height);
+    main.fill(0,255,0);
+    main.rect((main.width / 150) * 166 ,0,main.width / 150, main.height);
+    main.fill(255,0,0);
+    main.rect((main.width / 150) * 165 ,0,main.width / 150, main.height);
     main.endDraw();
 }
 
@@ -138,7 +146,7 @@ float custom_height;
             float cG = green(pixG);
             float cB = blue(pixB);
 
-            storedColor = hex(color(cR, cG, cB));
+            storedColor = hex(color(cR, cG, cB));   
 
             if (inventory.hasKey(storedColor) == true) {
                 inventory.increment(storedColor);
@@ -194,7 +202,20 @@ float custom_height;
 
  public void drawLerp() {
     lerp.beginDraw();
-    
+
+    fillDict();
+    bright_numb = new int[inventory.size()];
+
+    for(int i = 0; i < inventory.size(); i++) {
+        usableColor = unhex(inventory.key(i));
+
+        int uc_bright = PApplet.parseInt(brightness(usableColor));
+        bright_numb[i] = uc_bright;
+    }
+
+    int dark_bright = min(bright_numb); // plus sombre
+    int light_bright = max(bright_numb); // plus clair
+
     float amount = 6;
     float shapes_w = lerp.width;
     float shapes_h = lerp.height / amount;
@@ -208,8 +229,11 @@ float custom_height;
 
         row += shapes_h;
         index++;
-        lerp.stroke(0, 0 + index * 10, 0);
-        lerp.fill(0, 0 + index * 10, 0);
+
+        float incr_bright = ((light_bright - dark_bright) / amount) * index;
+
+        lerp.stroke(incr_bright);
+        lerp.fill(incr_bright);
         lerp.rect(0,row, shapes_w, shapes_h);
     }
 
@@ -282,7 +306,6 @@ float custom_height;
         
         pic_04.stroke(new_copy_color);
         pic_04.point(i, j);
-      
     }
   }
     pic_04.endDraw();
@@ -385,7 +408,8 @@ float custom_height;
 }
 
 
-  public void settings() { size(700, 990); }
+  public void settings() { size(700, 990);
+pixelDensity(2); }
 
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "img_parser_poster" };
