@@ -28,10 +28,11 @@ float custom_width;
 float custom_height;
 
 void setup() {
-    size(700, 990); // A4 ratio
+    // size(700, 990); // A4 ratio
+    size(2480, 3508); // A4 ratio
 
     pixelDensity(2);
-    border = 28;
+    border = 80;
     
     main = createGraphics(width - border, height - border);
     seed = createGraphics(main.width, main.height);
@@ -49,7 +50,7 @@ void setup() {
 
     
 
-    seed_image = loadImage("seed_10.jpg");
+    seed_image = loadImage("flower_2.jpg");
 
     // Dict variables
 
@@ -88,24 +89,35 @@ void draw() {
 
 void drawMain(){
     main.beginDraw();
-    main.image(seed, 0, 0, (main.width / 4) * 3, (main.height / 6) * 4);
+    main.image(seed, 0, 0, (main.width / 4) * 3, (main.height / 6) * 4.5);
     main.image(shapes_dict, 0, (main.height / 6) * 4, (main.width / 4) * 3, (main.height / 12) * 3);
     main.image(lerp, (main.width / 4) * 3, 0, main.width / 4 + 2, main.height);
     // main.image(pic_01, 0, 0);
-    main.image(pic_02, 0, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
-    main.image(pic_03, main.width / 8, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
-    main.image(pic_04, (main.width / 8) * 2, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
-    main.image(pic_05, (main.width / 8) * 3, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
-    main.image(pic_06, (main.width / 8) * 4, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
-    main.image(pic_07, (main.width / 8) * 5, (main.height / 12) * 11, main.width / 8, main.height / 12 + 2);
+    main.image(pic_02, 0, (main.height / 12) * 11, main.width / 8, main.height / 12 + 12);
+    main.image(pic_05, main.width / 8, (main.height / 12) * 11, main.width / 8, main.height / 12 + 12);
+    main.image(pic_03, (main.width / 8) * 2, (main.height / 12) * 11, main.width / 8, main.height / 12 + 12);
+    main.image(pic_06, (main.width / 8) * 3, (main.height / 12) * 11, main.width / 8, main.height / 12 + 12);
+    main.image(pic_04, (main.width / 8) * 4, (main.height / 12) * 11, main.width / 8, main.height / 12 + 12);
+    main.image(pic_07, (main.width / 8) * 5, (main.height / 12) * 11, main.width / 8, main.height / 12 + 12);
 
-    main.noStroke();
-    main.fill(0,0,255);
-    main.rect((main.width / 150) * 167 ,0,main.width / 150, main.height);
-    main.fill(0,255,0);
-    main.rect((main.width / 150) * 166 ,0,main.width / 150, main.height);
-    main.fill(255,0,0);
-    main.rect((main.width / 150) * 165 ,0,main.width / 150, main.height);
+    // main.noStroke();
+    // main.fill(0,0,255);
+    // main.rect((main.width / 150) * 167 ,0,main.width / 150, main.height);
+    // main.fill(0,255,0);
+    // main.rect((main.width / 150) * 166 ,0,main.width / 150, main.height);
+    // main.fill(255,0,0);
+    // main.rect((main.width / 150) * 165 ,0,main.width / 150, main.height);
+
+    int lineBorder = 20;
+
+    main.strokeWeight(lineBorder);
+    main.stroke(0,0,255);
+    main.line(main.width - lineBorder / 2, 0, main.width - lineBorder / 2, main.height);
+    main.stroke(0,255,0);
+    main.line(main.width - lineBorder * 1.5, 0, main.width - lineBorder * 1.5, main.height);
+    main.stroke(255,0,0);
+    main.line(main.width - lineBorder * 2.5, 0, main.width - lineBorder * 2.5, main.height);
+
     main.endDraw();
 }
 
@@ -199,6 +211,8 @@ void drawLerp() {
     int dark_bright = min(bright_numb); // plus sombre
     int light_bright = max(bright_numb); // plus clair
 
+    println(dark_bright, light_bright);
+
     float amount = 6;
     float shapes_w = lerp.width;
     float shapes_h = lerp.height / amount;
@@ -211,13 +225,17 @@ void drawLerp() {
     while (index < amount) {
 
         row += shapes_h;
-        index++;
 
-        float incr_bright = ((light_bright - dark_bright) / amount) * index;
+        float incr_bright = (light_bright - dark_bright) / (amount - 1);
 
-        lerp.stroke(incr_bright);
-        lerp.fill(incr_bright);
+        lerp.stroke(dark_bright + (incr_bright * index));
+        lerp.fill(dark_bright + (incr_bright * index));
+
+        println(incr_bright);
+        
         lerp.rect(0,row, shapes_w, shapes_h);
+
+        index++;
     }
 
     lerp.endDraw();
@@ -225,7 +243,7 @@ void drawLerp() {
 
 void drawPic01(){
     pic_01.beginDraw();
-    pic_01.image(seed_image, 0, 0, pic_01.width / 2, pic_01.height / 2);
+    pic_01.image(seed_image, 0, -pic_01.width / 6, pic_01.width / 2, (pic_01.height / 2) * 1.5);
     pic_01.endDraw();
 }
 
@@ -336,8 +354,8 @@ void drawPic06(){
 
         color new_copy_color;
 
-        if(px_b > 200) {
-            new_copy_color = color(0, 100, 100);
+        if(px_b < 150) {
+            new_copy_color = color(70, 100, 100);
         }else {
             new_copy_color = color(px_h, px_s, px_b);
         }
